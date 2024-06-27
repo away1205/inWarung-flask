@@ -17,7 +17,7 @@ The project is organized into the following files:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/flask-rest-api-example.git
+   git clone https://github.com/away1205/inWarung-flask.git
    cd flask-rest-api-example
    ```
 
