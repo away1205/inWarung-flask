@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_restful import Api
 from config import Config
@@ -18,6 +19,17 @@ from resources import (
 )
 
 app = Flask(__name__)
+
+# WEBSITE_HOSTNAME exists only in production environment
+if "WEBSITE_HOSTNAME" not in os.environ:
+    # local development, where we'll use environment variables
+    print("Loading config.development and environment variables from .env file.")
+    app.config.from_object("azureproject.development")
+else:
+    # production
+    print("Loading config.production.")
+    app.config.from_object("azureproject.production")
+
 app.config.from_object(Config)
 
 # Initialize the DB connection
