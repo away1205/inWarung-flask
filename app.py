@@ -61,7 +61,7 @@ api.add_resource(RestockResource, "/api/restocks/<int:id>")
 
 @app.route("/")
 def home():
-    return "<h1>Flask Rest Api</h1>"
+    return "<h1>inWarung</h1>"
 
 
 if __name__ == "__main__":
