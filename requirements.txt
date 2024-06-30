@@ -28,7 +28,6 @@ pycparser==2.22
 PyJWT==2.8.0
 python-dotenv==1.0.1
 pytz==2024.1
-pywin32==306
 requests==2.32.3
 six==1.16.0
 SQLAlchemy==2.0.31
