@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from flask_restful import Api
-from config import Config
+from flask_migrate import Migrate
 from models import db
 from resources import (
     Users,
@@ -30,10 +30,16 @@ else:
     print("Loading config.production.")
     app.config.from_object("azureproject.production")
 
-app.config.from_object(Config)
+app.config.update(
+    SQLALCHEMY_DATABASE_URI=app.config.get("DATABASE_URI"),
+    SQLALCHEMY_TRACK_MODIFICATIONS=False,
+)
 
 # Initialize the DB connection
 db.init_app(app)
+
+# Enable Flask-Migrate commands "flask db init/migrate/upgrade" to work
+migrate = Migrate(app, db)
 
 # Define our api
 api = Api(app)
