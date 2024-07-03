@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class UserModel(db.Model):
     __tablename__ = "user"
 
-    id_user = db.Column(db.Integer, primary_key=True)
+    id_user = db.Column(db.String(80), primary_key=True)
     email = db.Column(db.String(80), nullable=False)
     username = db.Column(db.String(80), nullable=False)
     business_name = db.Column(db.String(80), nullable=False)
@@ -18,7 +18,7 @@ class UserModel(db.Model):
 class Product(db.Model):
     __tablename__ = "product"
 
-    id_product = db.Column(db.Integer, primary_key=True)
+    id_product = db.Column(db.String(80), primary_key=True)
     product_name = db.Column(db.String(80), nullable=False)
     id_category = db.Column(
         db.Integer, db.ForeignKey("category_product.id_category"), nullable=False
@@ -34,7 +34,7 @@ class Product(db.Model):
 class CategoryProduct(db.Model):
     __tablename__ = "category_product"
 
-    id_category = db.Column(db.Integer, primary_key=True)
+    id_category = db.Column(db.String(80), primary_key=True)
     category_name = db.Column(db.String(80), nullable=False)
     id_user = db.Column(db.Integer, db.ForeignKey("user.id_user"), nullable=False)
 
@@ -45,7 +45,7 @@ class CategoryProduct(db.Model):
 class DetailTransaction(db.Model):
     __tablename__ = "detail_transaction"
 
-    id_transaction = db.Column(db.Integer, primary_key=True)
+    id_transaction = db.Column(db.String(80), primary_key=True)
     transaction_date = db.Column(db.DateTime, nullable=False)
     id_product = db.Column(
         db.Integer, db.ForeignKey("product.id_product"), nullable=False
@@ -61,7 +61,7 @@ class DetailTransaction(db.Model):
 class Transaction(db.Model):
     __tablename__ = "transaction"
 
-    id_transaction = db.Column(db.Integer, primary_key=True)
+    id_transaction = db.Column(db.String(80), primary_key=True)
     id_user = db.Column(db.Integer, db.ForeignKey("user.id_user"), nullable=False)
 
     def __repr__(self):
@@ -71,7 +71,7 @@ class Transaction(db.Model):
 class Restock(db.Model):
     __tablename__ = "restock"
 
-    id_restock = db.Column(db.Integer, primary_key=True)
+    id_restock = db.Column(db.String(80), primary_key=True)
     restock_date = db.Column(db.DateTime, nullable=False)
     id_product = db.Column(
         db.Integer, db.ForeignKey("product.id_product"), nullable=False

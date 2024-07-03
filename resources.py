@@ -11,14 +11,14 @@ from models import (
 
 # Fields for marshalling the data
 userFields = {
-    "id_user": fields.Integer,
+    "id_user": fields.String,
     "email": fields.String,
     "username": fields.String,
     "business_name": fields.String,
 }
 
 productFields = {
-    "id_product": fields.Integer,
+    "id_product": fields.String,
     "product_name": fields.String,
     "id_category": fields.Integer,
     "wholesale_price": fields.Float,
@@ -27,13 +27,13 @@ productFields = {
 }
 
 categoryProductFields = {
-    "id_category": fields.Integer,
+    "id_category": fields.String,
     "id_user": fields.Integer,
     "category_name": fields.String,
 }
 
 detailTransactionFields = {
-    "id_transaction": fields.Integer,
+    "id_transaction": fields.String,
     "transaction_date": fields.DateTime,
     "id_product": fields.Integer,
     "qty_purchases": fields.Integer,
@@ -41,10 +41,10 @@ detailTransactionFields = {
     "price_subtotal": fields.Float,
 }
 
-transactionFields = {"id_transaction": fields.Integer, "id_user": fields.Integer}
+transactionFields = {"id_transaction": fields.String, "id_user": fields.Integer}
 
 restockFields = {
-    "id_restock": fields.Integer,
+    "id_restock": fields.String,
     "restock_date": fields.DateTime,
     "id_product": fields.Integer,
     "qty_restock": fields.Integer,
@@ -52,7 +52,9 @@ restockFields = {
 
 # Parsers for the request arguments
 user_args = reqparse.RequestParser()
+
 user_args.add_argument("email", type=str, required=True, help="Email cannot be blank")
+user_args.add_argument("id_user", type=str, required=True, help="id user cannot be blank")
 user_args.add_argument(
     "username", type=str, required=True, help="Username cannot be blank"
 )
@@ -65,7 +67,10 @@ product_args.add_argument(
     "product_name", type=str, required=True, help="Product name cannot be blank"
 )
 product_args.add_argument(
-    "id_category", type=int, required=True, help="Category ID cannot be blank"
+    "id_category", type=str, required=True, help="Category ID cannot be blank"
+)
+product_args.add_argument(
+    "id_product", type=str, required=True, help="Product ID cannot be blank"
 )
 product_args.add_argument(
     "wholesale_price", type=float, required=True, help="Wholesale price cannot be blank"
@@ -74,26 +79,32 @@ product_args.add_argument(
     "retail_price", type=float, required=True, help="Retail price cannot be blank"
 )
 product_args.add_argument(
-    "id_user", type=int, required=True, help="User ID cannot be blank"
+    "id_user", type=str, required=True, help="User ID cannot be blank"
 )
 
 category_product_args = reqparse.RequestParser()
 category_product_args.add_argument(
-    "id_user", type=int, required=True, help="User ID cannot be blank"
+    "id_user", type=str, required=True, help="User ID cannot be blank"
 )
 category_product_args.add_argument(
     "category_name", type=str, required=True, help="Category name cannot be blank"
 )
+category_product_args.add_argument(
+    "id_category", type=str, required=True, help="Category ID cannot be blank"
+)
 
 detail_transaction_args = reqparse.RequestParser()
 detail_transaction_args.add_argument(
-    "id_transaction", type=int, required=True, help="Transaction ID cannot be blank"
+    "id_transaction", type=str, required=True, help="Transaction ID cannot be blank"
+)
+detail_transaction_args.add_argument(
+    "id_detail_transaction", type=str, required=True, help="Detail Transaction ID cannot be blank"
 )
 detail_transaction_args.add_argument(
     "transaction_date", type=str, required=True, help="Transaction date cannot be blank"
 )
 detail_transaction_args.add_argument(
-    "id_product", type=int, required=True, help="Product ID cannot be blank"
+    "id_product", type=str, required=True, help="Product ID cannot be blank"
 )
 detail_transaction_args.add_argument(
     "qty_purchases", type=int, required=True, help="Quantity purchases cannot be blank"
@@ -107,7 +118,10 @@ detail_transaction_args.add_argument(
 
 transaction_args = reqparse.RequestParser()
 transaction_args.add_argument(
-    "id_user", type=int, required=True, help="User ID cannot be blank"
+    "id_user", type=str, required=True, help="User ID cannot be blank"
+)
+transaction_args.add_argument(
+    "id_transaction", type=str, required=True, help="Transaction ID cannot be blank"
 )
 
 restock_args = reqparse.RequestParser()
@@ -115,7 +129,7 @@ restock_args.add_argument(
     "restock_date", type=str, required=True, help="Restock date cannot be blank"
 )
 restock_args.add_argument(
-    "id_product", type=int, required=True, help="Product ID cannot be blank"
+    "id_product", type=str, required=True, help="Product ID cannot be blank"
 )
 restock_args.add_argument(
     "qty_restock", type=int, required=True, help="Quantity restock cannot be blank"
@@ -132,6 +146,7 @@ class Users(Resource):
     def post(self):
         args = user_args.parse_args()
         user = UserModel(
+            id_user=args["id_user"],
             email=args["email"],
             username=args["username"],
             business_name=args["business_name"],
@@ -181,6 +196,7 @@ class Products(Resource):
     def post(self):
         args = product_args.parse_args()
         product = Product(
+            id_product=args["id_product"],
             product_name=args["product_name"],
             id_category=args["id_category"],
             wholesale_price=args["wholesale_price"],
@@ -234,7 +250,7 @@ class CategoryProducts(Resource):
     def post(self):
         args = category_product_args.parse_args()
         category = CategoryProduct(
-            id_user=args["id_user"], category_name=args["category_name"]
+            id_user=args["id_user"], category_name=args["category_name"], id_category=args["id_category"],
         )
         db.session.add(category)
         db.session.commit()
@@ -280,6 +296,7 @@ class DetailTransactions(Resource):
     def post(self):
         args = detail_transaction_args.parse_args()
         detail = DetailTransaction(
+            id_detail_transaction=args["id_detail_transaction"],
             id_transaction=args["id_transaction"],
             transaction_date=args["transaction_date"],
             id_product=args["id_product"],
@@ -333,7 +350,7 @@ class Transactions(Resource):
     @marshal_with(transactionFields)
     def post(self):
         args = transaction_args.parse_args()
-        transaction = Transaction(id_user=args["id_user"])
+        transaction = Transaction(id_user=args["id_user"], id_transaction=args["id_transaction"])
         db.session.add(transaction)
         db.session.commit()
         return transaction, 201
@@ -378,6 +395,7 @@ class Restocks(Resource):
         args = restock_args.parse_args()
         restock = Restock(
             restock_date=args["restock_date"],
+            id_restock=args["id_restock"],
             id_product=args["id_product"],
             qty_restock=args["qty_restock"],
         )
