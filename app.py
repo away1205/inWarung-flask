@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
+from flask_cors import CORS
 from models import db
 from resources import (
     Users,
@@ -19,6 +20,7 @@ from resources import (
 )
 
 app = Flask(__name__)
+CORS(app)
 
 # WEBSITE_HOSTNAME exists only in production environment
 if "WEBSITE_HOSTNAME" not in os.environ:
