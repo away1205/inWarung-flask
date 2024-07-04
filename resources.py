@@ -24,7 +24,7 @@ productFields = {
     "current_stock": fields.Integer,
     "wholesale_price": fields.Float,
     "retail_price": fields.Float,
-    "id_user": fields.Integer,
+    "id_user": fields.String,
 }
 
 categoryProductFields = {
