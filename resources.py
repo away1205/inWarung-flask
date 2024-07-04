@@ -20,7 +20,8 @@ userFields = {
 productFields = {
     "id_product": fields.String,
     "product_name": fields.String,
-    "id_category": fields.Integer,
+    "id_category": fields.String,
+    "current_stock": fields.Integer,
     "wholesale_price": fields.Float,
     "retail_price": fields.Float,
     "id_user": fields.Integer,
@@ -28,12 +29,13 @@ productFields = {
 
 categoryProductFields = {
     "id_category": fields.String,
-    "id_user": fields.Integer,
+    "id_user": fields.String,
     "category_name": fields.String,
 }
 
 detailTransactionFields = {
     "id_transaction": fields.String,
+    "id_detail_transaction": fields.String,
     "transaction_date": fields.DateTime,
     "id_product": fields.Integer,
     "qty_purchases": fields.Integer,
@@ -41,12 +43,12 @@ detailTransactionFields = {
     "price_subtotal": fields.Float,
 }
 
-transactionFields = {"id_transaction": fields.String, "id_user": fields.Integer}
+transactionFields = {"id_transaction": fields.String, "id_user": fields.String}
 
 restockFields = {
     "id_restock": fields.String,
     "restock_date": fields.DateTime,
-    "id_product": fields.Integer,
+    "id_product": fields.String,
     "qty_restock": fields.Integer,
 }
 
@@ -77,6 +79,9 @@ product_args.add_argument(
 )
 product_args.add_argument(
     "retail_price", type=float, required=True, help="Retail price cannot be blank"
+)
+product_args.add_argument(
+    "current_stock", type=int, required=True, help="current stock cannot be blank"
 )
 product_args.add_argument(
     "id_user", type=str, required=True, help="User ID cannot be blank"
@@ -197,11 +202,12 @@ class Products(Resource):
         args = product_args.parse_args()
         product = Product(
             id_product=args["id_product"],
-            product_name=args["product_name"],
             id_category=args["id_category"],
+            id_user=args["id_user"],
+            current_stock=args["current_stock"],
+            product_name=args["product_name"],
             wholesale_price=args["wholesale_price"],
             retail_price=args["retail_price"],
-            id_user=args["id_user"],
         )
         db.session.add(product)
         db.session.commit()
