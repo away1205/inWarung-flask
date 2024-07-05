@@ -1,5 +1,6 @@
 import datetime
 from flask_sqlalchemy import SQLAlchemy
+import uuid
 
 db = SQLAlchemy()
 
@@ -19,7 +20,7 @@ class UserModel(db.Model):
 class Product(db.Model):
     __tablename__ = "product"
 
-    id_product = db.Column(db.String, primary_key=True)
+    id_product = db.Column(db.String, default=uuid.uuid1, primary_key=True)
     id_category = db.Column(db.String, db.ForeignKey('category_product.id_category'), nullable=False)
     id_user = db.Column(db.String, db.ForeignKey('user.id_user'), nullable=False)
     product_name = db.Column(db.String, nullable=False)

@@ -71,9 +71,9 @@ product_args.add_argument(
 product_args.add_argument(
     "id_category", type=str, required=True, help="Category ID cannot be blank"
 )
-product_args.add_argument(
-    "id_product", type=str, required=True, help="Product ID cannot be blank"
-)
+# product_args.add_argument(
+#     "id_product", type=str, required=True, help="Product ID cannot be blank"
+# )
 product_args.add_argument(
     "wholesale_price", type=float, required=True, help="Wholesale price cannot be blank"
 )
@@ -201,7 +201,7 @@ class Products(Resource):
     def post(self):
         args = product_args.parse_args()
         product = Product(
-            id_product=args["id_product"],
+            # id_product=args["id_product"],
             id_category=args["id_category"],
             id_user=args["id_user"],
             current_stock=args["current_stock"],
