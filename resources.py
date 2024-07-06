@@ -130,9 +130,9 @@ transaction_args.add_argument(
 )
 
 restock_args = reqparse.RequestParser()
-restock_args.add_argument(
-    "restock_date", type=str, required=True, help="Restock date cannot be blank"
-)
+# restock_args.add_argument(
+#     "restock_date", type=str, required=True, help="Restock date cannot be blank"
+# )
 restock_args.add_argument(
     "id_product", type=str, required=True, help="Product ID cannot be blank"
 )
@@ -400,8 +400,6 @@ class Restocks(Resource):
     def post(self):
         args = restock_args.parse_args()
         restock = Restock(
-            restock_date=args["restock_date"],
-            id_restock=args["id_restock"],
             id_product=args["id_product"],
             qty_restock=args["qty_restock"],
         )
@@ -413,7 +411,7 @@ class Restocks(Resource):
 class RestockResource(Resource):
     @marshal_with(restockFields)
     def get(self, id):
-        restock = Restock.query.filter_by(id_restock=id).first()
+        restock = Restock.query.filter_by(id_product=id).all()
         if not restock:
             abort(404, message="Restock not found")
         return restock
